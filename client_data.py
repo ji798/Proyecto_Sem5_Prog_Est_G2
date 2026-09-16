@@ -8,11 +8,11 @@ def get_client_data():
         print("\nOperación cancelada por el usuario.")
         return None
 
-    datos_cliente = {
+    client_data = {
         "nombre": first_name,
         "apellido": last_name,
         "tipo_cliente": client_type,
         
     }
 
-    return datos_cliente
+    return client_data

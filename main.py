@@ -1,26 +1,58 @@
 import calculate
-import client_data
+import client_data as client_data
 import shipping_fee
 
 
-def menu():
-    print("=== Menú de opciones ===")
-    print("1. Ingresar datos del cliente")
-    print("2. realizar cotización")
-    print("3. Salir")
+
+
+def mostrar_cotizacion(product_name, amount, subtotal, discount, total, shipping_fee_value):
+    print(f"Producto: {product_name}")
+    print(f"cantidad: {amount}")
+    print(f"Subtotal: {subtotal}")
+    print(f"Descuento: {discount}")
+    print(f"Total: {total}")
+    print(f"Gastos de envío: {shipping_fee_value}")
 
 def main():
     # Aquí puedes llamar a las funciones que necesites para ejecutar tu programa
     while True: 
-        menu()
+        print("Seleccione una opción:")
+        print("1. Realizar cotización")
+        print("2. Salir")
         choice = input("Seleccione una opción: ")
 
-        if choice == "1":
-            client_data = client_data.get_client_data()
+        match choice:
+            case "1":
+                try:
+                    data = client_data.get_client_data()
+                    
 
-            if client_data is not None:
-                print("Datos del cliente:")
-                print(f"Nombre: {client_data['nombre']}")
-                print(f"Apellido: {client_data['apellido']}")
-                print(f"Tipo de cliente: {client_data['tipo_cliente']}")
-                print(f"Zona: {client_data['zona']}")
+                    if data is not None:
+                        print("Datos del cliente:")
+                        print(f"Nombre: {data['nombre']}")
+                        print(f"Apellido: {data['apellido']}")
+                        print(f"Tipo de cliente: {data['tipo_cliente']}")
+                        
+                
+                        product_name = input("Ingrese el nombre del producto: ")
+                        amount = int(input("Ingrese la cantidad de productos: "))
+                        price = float(input("Ingrese el precio unitario del producto: "))
+
+                        subtotal = calculate.cal_subtotal(amount, price)
+                        discount = calculate.cal_discount(subtotal)
+                        total = calculate.cal_total(subtotal, discount)
+                        shipping_fee_value = shipping_fee.cal_shipping_fee(subtotal, shipping_fee.determinar_zona())
+
+                        mostrar_cotizacion(product_name, amount, subtotal, discount, total, shipping_fee_value)
+
+                        print("=================================================================\n")
+
+                except ValueError:
+                    print("Por favor, ingrese valores numéricos válidos.")
+
+            case "2":
+                print("Saliendo del programa...")
+                print("=================================================================\n")
+                break
+
+main()
